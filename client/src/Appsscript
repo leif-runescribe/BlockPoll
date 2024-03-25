@@ -1,0 +1,53 @@
+Plenome
+https://script.google.com/macros/s/AKfycbyvPJyaxOkx6-zKRpLlOfx3Eq4iOL5A7TR9Nyke8kvMuB2S35y_J0ugMqxaMf6wLb9mpg/exec
+
+function doGet(e) {
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getSheets()[0];
+  const dataRange = sheet.getDataRange();
+  const values = dataRange.getValues();
+  const headers = values[0];
+  const rollIndex = headers.indexOf('roll');
+  const pswIndex = headers.indexOf('psw');
+  const hasVotedIndex = headers.indexOf('hasVoted');
+
+  // Extract the values for the desired columns
+  const extractedData = values.slice(1).map(row => ({
+    roll: row[rollIndex],
+    psw: row[pswIndex],
+    hasVoted: row[hasVotedIndex],
+  }));
+
+  // Convert the extracted data to JSON
+  const jsonData = JSON.stringify(extractedData);
+
+  // Assuming it's a web app, return the JSON data
+  return ContentService
+    .createTextOutput(jsonData)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+function doPost(e) {
+  const roll = "";
+  if('roll' in e.parameter){
+    roll = e.parameter['roll']
+  }
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getSheets()[0];
+  const dataRange = sheet.getDataRange();
+  const values = dataRange.getValues();
+  const headers = values[0];
+  const rollIndex = headers.indexOf('roll');
+  const hasVotedIndex = headers.indexOf('hasVoted');
+
+  // Find the index of the row with the given roll
+  const rowIndex = values.findIndex(row => row[rollIndex] === roll);
+
+  if (rowIndex !== -1) {
+    // Update the hasVoted value to "yes"
+    sheet.getRange(rowIndex + 1, hasVotedIndex + 1).setValue("yes"); // +1 because sheet API is 1-indexed
+  } else {
+    // Roll not found
+    Logger.log(`Roll ${roll} not found`);
+  }
+}
+
