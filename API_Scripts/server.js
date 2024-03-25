@@ -14,7 +14,8 @@ const votingStatus = require('../API_Scripts/votingStatus_Script')
 app.use(cors({
   origin: "http://localhost:3000", // Replace with your React app's origin
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // allowed HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'] // allowed headers
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  // allowed headers
 }));
 app.post('/add-admin', async (req, res) => {
   try {

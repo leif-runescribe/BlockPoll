@@ -90,16 +90,13 @@ const Grid = ({ data }) => {
             nav('/voted')
             // const res = await axios.post(`${baseUrl}?roll=${user}`)
             // console.log(`${baseUrl}?roll=${user}`)
-            // console.log("update hasVoted",res)
-           
+            // console.log("update hasVoted",res)      
         }catch(e){
             console.log(e)
         }
     }
         else  alert("Either allot preferences to all candidates or choose ABSTAIN or REJECT!")
-
-    }
-    
+    }   
     const sendVote=async(dataObj)=>{
         try{    
             console.log(dataObj)
