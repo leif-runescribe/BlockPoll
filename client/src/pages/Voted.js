@@ -1,9 +1,18 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Voted = () => {
-  
+  const navigate = useNavigate()
+  useEffect(() => {
+    
+    const timer = setTimeout(() => {
+      navigate('/');
+    }, 3000);
+
+    // Clean up the timer on component unmount
+    return () => clearTimeout(timer);
+  }, [navigate]);
   
   
   return (
@@ -23,6 +32,7 @@ const Voted = () => {
 
         <div className=" border w-72 border-gray-400 sm:max-w-sm mt-20 bg-white ">
         <h2 className="text-white font-bold text-2xl px-6 py-8 w-full flex  bg-green-500 ">You have already voted succefully!</h2>
+        <h1 className='py-10'>Redirecting to Homepage...</h1>
             </div>
      
       </div>
