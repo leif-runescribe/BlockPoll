@@ -8,7 +8,7 @@ const Voted = () => {
     
     const timer = setTimeout(() => {
       navigate('/');
-    }, 3000);
+    }, 5000);
 
     // Clean up the timer on component unmount
     return () => clearTimeout(timer);

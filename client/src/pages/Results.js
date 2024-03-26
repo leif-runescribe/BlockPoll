@@ -1,62 +1,97 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 const Results = () => {
 
   
-  const [data, setData] = useState(""); 
+  const [candidateData, setCandidateData] = useState(""); 
+  const [voteData, setVoteData] = useState([]); 
+ 
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false)
+ 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true)
+  // const fetchData = async () => {
+  //   setIsLoading(true) 
+  //   try{
+  //     const response = await fetch("https://script.google.com/macros/s/AKfycbyBRLxlZDbX9NslbJlAiHAtPnGhGGWppF5-Mffdo-DIngitfVyxtgheg8oYMill7Yvs/exec");  
+  //     if (!response.ok) {
+  //       throw new Error(`Error fetching data: ${response.status}`);
+  //     }
+  //     const fetchedData = await response.json();
+  //     const data = Object.values(fetchedData);
+  //     setCandidateData(data); 
+  //     console.log(candidateData)
+  //   } catch (error) {
+  //     console.error(error.message);
+  //   }finally{
+  //     setIsLoading(prevLoading => (prevLoading && !voteData) || false);
+  //   }
+  // };
+
+  const fetchVotes= async () => {
+    setIsLoading(true)
+    try {
+      const response = await axios.post('http://localhost:3001/poll-votes');
+      const data = await response.data.data
+      setVoteData(data); 
       
-      try{
-        const response = await fetch("https://script.google.com/macros/s/AKfycbyBRLxlZDbX9NslbJlAiHAtPnGhGGWppF5-Mffdo-DIngitfVyxtgheg8oYMill7Yvs/exec");
-        if (!response.ok) {
-          throw new Error(`Error fetching data: ${response.status}`);
-        }
+    
+    } catch (error) {
+      console.log(error.message);
+    } finally{
+      setIsLoading(false); 
+    }
+    }
+    
+  useEffect(()=>{
+    
+    fetchVotes()
+  }, [])
 
-        const fetchedData = await response.json();
-        const d = Object.values(fetchedData);
-        
-        setData(d);
-        console.log(data) 
-        
-      } catch (error) {
-        console.error(error.message);
-      }finally{
-        setIsLoading(false)
-      }
-    };
 
-    fetchData();
-  }, []); 
-
-    const arr = ["132", "213", "321", "123", "231", "312"];
   return (
-    <div className="flex justify-center">
-    <table className="table-auto border-collapse border border-gray-400">
-      <thead>
-        
-        <tr>
-        {data.map((item)=>(
-          
-          <th className="px-4 py-2 border border-gray-400">{item.name}</th>
-        ))}
+    <>
+      {isLoading ? (<div className='mt-40 text-4xl flex justify-center items-center'>Fetching results...
+        <div
+        className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-black"
+        role="status">
+        <span
+        className="!absolute text-b !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+        ></span>
+        </div></div>):
+        <>
+         <div className="flex mt-20 justify-center items-center">
+  <table className="table-auto border border-black">
+    <thead>
+      <tr>
+        <th className="px-4 py-2 text-left border border-black">Prakhar Maheshwari</th>
+        <th className="px-4 py-2 text-left border border-black">Atharv Joshi</th>
+        <th className="px-4 py-2 text-left border border-black">Diwakar Kumar</th>
+        <th className="px-4 py-2 text-left border border-black">Anushka Bhangale</th>
+      </tr>
+    </thead>
+    <tbody>
+      {Array.isArray(voteData)&&voteData?.map((item, rowIndex) => {
+        // Splitting the string into individual digits
+        const digits = item.split('');
+
+        // Rendering each digit in a separate column
+        return (
+          <tr cclassName="border border-black" key={rowIndex}>
+            {digits.map((digit, columnIndex) => (
+              <td className="px-4 py-2 border-r border-black" key={columnIndex}>{digit}</td>
+            ))}
           </tr>
-      </thead>
-      <tbody>
-        {arr.map((value, index) => (
-          <tr key={index}>
-            
-            <td className="px-4 py-2 border border-gray-400">{value[0]}</td>
-            <td className="px-4 py-2 border border-gray-400">{value[1]}</td>
-            <td className="px-4 py-2 border border-gray-400">{value[2]}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+        );
+      })}
+    </tbody>
+  </table>
+</div> hi
+        </>
+        }
+    
+  </>
   );
 };
 

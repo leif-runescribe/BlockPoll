@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, {useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const AdminFunctions = () => {
+  const nav = useNavigate()
     const [selectedOption, setSelectedOption] = useState(null);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -14,6 +16,7 @@ const AdminFunctions = () => {
       { label: 'View Votes', endpoint: 'http://localhost:3001/poll-votes' },
       { label: 'Voting Status', endpoint: 'http://localhost:3001/voting-status' },
       { label: 'Poll Details', endpoint: 'http://localhost:3001/poll-details' },
+      
       
       // Add more options as needed
     ];
@@ -47,11 +50,13 @@ const AdminFunctions = () => {
     const handleCloseClick = ()=>{
       setShowData(false)
     }
-  
+    const handleResults=()=>{
+      nav('/results')
+    }
     return (
       <div className="container mx-auto py-8">
         <h1 className="text-3xl font-bold mb-4">Admin Functions</h1>
-        <div className="flex flex-wrap mb-4">
+        <div className="flex flex-wrap mb-4 ">
           {options.map((option, index) => (
             <button
               key={index}
@@ -63,6 +68,13 @@ const AdminFunctions = () => {
               {option.label}
             </button>
           ))}
+          <button
+              
+              className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2 mb-2`}
+              onClick={handleResults}
+            >
+              POLL RESULTS
+            </button>
         </div>
         {loading && <h1>Loading...</h1>}
         {error && <h1 className="text-red-500">{error}</h1>}
