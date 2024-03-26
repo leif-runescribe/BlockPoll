@@ -4,16 +4,11 @@ import Grid from '../components/Grid';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
-
-
-
 const Admin = () => {
   const {user} = useContext(UserContext)
   const [data, setData] = useState(""); 
   const [isLoading, setIsLoading] = useState(false);
-  
 
-  
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
@@ -50,8 +45,8 @@ const Admin = () => {
       <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50 flex items-center justify-between p-8">
       <h1 className="text-3xl md:text-5xl font-bold">IITM SLC Speaker's Election, 2024</h1>
       
-      <h1 className='text-2xl'>Voter info: {user? user: "info"}</h1>
-      <Link to="/" className="text-blue-500 hover:underline">Home</Link>
+      <h1 className='text-2xl'>Roll No: {user? user: "info"}</h1>
+     
     </nav>
     <div className='min-h-screen bg-gray-100 px-20 max-w-full '>
       <button type="submit" className="..."></button>

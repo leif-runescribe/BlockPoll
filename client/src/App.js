@@ -8,6 +8,7 @@ import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
 import Voted from './pages/Voted';
 import { UserProvider } from './context/UserContext';
+import Results from './pages/Results';
 const App = () => {
   return (
     <UserProvider>
@@ -20,8 +21,9 @@ const App = () => {
           <Route path="/vote" element={<Vote/>}/>
           <Route path='/voted' element={<Voted/>}/>
          
-          <Route path='/admin'element={<Admin/>}/>
+          <Route path='/admin'element={<AdminLogin/>}/>
           <Route path='/adminlogin' element={<AdminLogin/>}/>
+          <Route path='/results' element={<Results/>}/>
           
         </Routes>
       

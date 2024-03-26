@@ -6,7 +6,7 @@ const AdminFunctions = () => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-  
+    const [showData, setShowData] = useState(false)
     const options = [
       { label: 'View Admin', endpoint: 'http://localhost:3001/view-admins' },
       { label: 'Start Election', endpoint: 'http://localhost:3001/start-election' },
@@ -26,23 +26,11 @@ const AdminFunctions = () => {
       try {
         const response = await axios.post(endpoint);
         const data = response.data;
-        const available=[]
-
+  
+        console.log(data)
         
-          if (data.data.admin) {
-           available.push(data.data.admin);
-          }
-          if (data.data.val) {
-           available.push(data.data.val);
-          }
-          if (data.data.stat) {
-           available.push(data.data.stat);
-          }
-          if (data.data.big) {
-           available.push(data.data.big);
-          }
-        setData(available);
-        console.log(available)
+        setData(data);
+        
       } catch (error) {
         setError(error.message);
       } finally {
@@ -51,9 +39,14 @@ const AdminFunctions = () => {
     };
   
     const handleOptionClick = (option) => {
+      setShowData(true)
       setSelectedOption(option);
       fetchData(option.endpoint);
+      setShowData(true)
     };
+    const handleCloseClick = ()=>{
+      setShowData(false)
+    }
   
     return (
       <div className="container mx-auto py-8">
@@ -71,12 +64,21 @@ const AdminFunctions = () => {
             </button>
           ))}
         </div>
-        {loading && <p>Loading...</p>}
-        {error && <p className="text-red-500">{error}</p>}
-        {data && (
+        {loading && <h1>Loading...</h1>}
+        {error && <h1 className="text-red-500">{error}</h1>}
+        {showData && data && (
+          <>
+           <button
+            className="absolute top-86 right-44 bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-2 rounded"
+            onClick={handleCloseClick}
+          >
+            &times;
+          </button>
           <pre className="bg-gray-200 p-4 rounded">
+            {console.log(data)}
             {JSON.stringify(data, null, 2)}
           </pre>
+          </>
         )}
       </div>
     );

@@ -35,6 +35,7 @@ const main = async (Client_PollDetails_String) => {
 
     ]
 
+
     let contractAddresses = JSON.parse(fs.readFileSync('./ContractAddresses.json'));
     let INFURA_ID = 'ea1c34919ef84b699cbfbc19866b1d98';
     let provider =  new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${INFURA_ID}`)
@@ -82,12 +83,12 @@ const main = async (Client_PollDetails_String) => {
 
     // view function for verification
 
-    const bytes4 = Client_PollDetails_String;
+    const bytes4 = stringToBytes4("SLCS");
     const bigIntValues = await ElectionContract.getGeneral_PollDetails(bytes4);
     const numberValues= bigIntValues.map(value => value.toString())
     console.log(numberValues); 
     res.val = numberValues
-
+    console.log("RESSSSS", res)
     return res 
 
 }

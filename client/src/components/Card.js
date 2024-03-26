@@ -13,26 +13,23 @@ const Card = ({ cardData, selectedPreference, updatePref, availablePref }) => {
         <div className="card shadow-lg rounded-lg overflow-hidden bg-gradient-to-r to-gray-400 flex flex-col">
   {/* Base styles and flexbox layout */}
   <div className='flex flex-col border-r-2'>
-  <h2 className='text-black  p-4 text-3xl px-10 text-center my-auto'>  {/* Title, centered and with margins for equal space */}
+  <h2 className='text-black  p-4 text-5xl px-10 text-center my-auto'>  {/* Title, centered and with margins for equal space */}
       {cardData.name}
     </h2> {/* Title */}
     <div className='flex flex-row pb-16'>
     {imageUrl ? 
   <img
-    className="w-40 h-40 object-cover rounded-t-lg bg-gray-300 flex-shrink-0" // Fixed size, cover aspect ratio
+    className="w-56 h-56 object-cover rounded-t-lg bg-gray-300 flex-shrink-0" // Fixed size, cover aspect ratio
     src={imageUrl}
     alt={cardData.name}
   /> : <img
-  className="w-40 h-40 object-cover rounded-t-lg bg-gray-300 flex-shrink-0" // Fixed size, cover aspect ratio
+  className="w-56 h-56 object-cover rounded-t-lg bg-gray-300 flex-shrink-0" // Fixed size, cover aspect ratio
   src=""
   alt={cardData.name}
 />
 }
-
-   
- 
   <div className="content flex flex-grow flex-col justify-around px-12"> {/* Content container */}
-    <h2 className='text-black text-xl p-4 pb-10 bg-slate-300 max-h-half rounded-lg'> {/* Description, limited height for equal space */}
+    <h2 className='text-black text-2xl p-4 pb-10 bg-slate-300 max-h-half rounded-lg'> {/* Description, limited height for equal space */}
       {cardData.desc}
     </h2> {/* Title */}
     <div className='flex gap-2 px-8 '>

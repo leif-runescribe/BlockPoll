@@ -2,6 +2,7 @@ import axios from 'axios'
 import React from 'react'
 import { useState } from 'react'
 import {Link, useNavigate} from 'react-router-dom'
+import AdminFunctions from '../components/AdminFunctions'
 
 
 
@@ -10,6 +11,7 @@ const AdminLogin = () => {
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
   const [error, seterror] = useState(false)
+  const [auth, setAauth] = useState(false)
   
 
   const handlelogin = async(e) => {
@@ -19,13 +21,33 @@ const AdminLogin = () => {
     const adminPass = "pass"
 
     if(username === adminName && password===adminPass){
-        navigate('/admin')
+        setAauth(true)
     }
     else
     seterror(true)
     }
   
   return (
+    <>
+    {auth?(
+      <div className="h-screen flex flex-col justify-center items-center relative">
+      
+      <img
+        src="/4.jpg"
+        alt="Background"
+        className=" opacity-20 absolute inset-0 w-full h-full object-cover"
+      />
+      <div className='button rounded-full p-4 text-xl hover:text-indigo-400 text-black absolute top-5 right-10'>
+            <Link to='/'>Home</Link>
+        </div>
+      <div className="bg-gray-100 bg-opacity-50 p-8 rounded-lg z-10 text-center flex flex-col">
+
+      <AdminFunctions/>
+      
+      </div>
+    </div>
+    ):
+    (
     <div className='h-screen flex flex-col justify-center items-center relative'>
       {error && alert("invalid login")}
       
@@ -86,7 +108,8 @@ const AdminLogin = () => {
           </form>
         </div>
       </div>
-    </div>
+    </div>)}
+    </>
   );
   }
 

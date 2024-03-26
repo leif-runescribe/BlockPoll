@@ -10,7 +10,7 @@ const endElection = require('../API_Scripts/endElection_Script')
 const startElection = require('../API_Scripts/startElection_Script')
 const viewAdmins = require('../API_Scripts/viewAdmin_Script')
 const votingStatus = require('../API_Scripts/votingStatus_Script')
-
+app.use(express.json());
 app.use(cors({
   origin: "http://localhost:3000", // Replace with your React app's origin
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // allowed HTTP methods
@@ -50,7 +50,7 @@ app.post('/start-election', async (req, res) => {
   app.post('/view-admins', async (req, res) => {
     try {
       const resp = await viewAdmins();
-      res.status(200).json({ message: 'view admins: ', data: resp });
+      res.status(200).json({ message: 'view admins: ', data: resp.admin });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Error view admins' });
@@ -69,7 +69,8 @@ app.post('/start-election', async (req, res) => {
 
   app.post('/add-vote', async (req, res) => {
     try {
-      const v = "SLCS321"
+      const v = req.body.finalString
+      
       const resp = await addVote(v);
       res.status(200).json({ message: 'added vote', data:resp });
     } catch (error) {
@@ -80,8 +81,10 @@ app.post('/start-election', async (req, res) => {
 
   app.post('/poll-details', async (req, res) => {
     try {
+      
       const resp = await pollDetails();
-      res.status(200).json({ message: 'poll details', data: resp });
+      console.log(resp)
+      res.status(200).json({ message: 'poll details', data: resp.val });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Error poll details' });
@@ -101,7 +104,7 @@ app.post('/start-election', async (req, res) => {
   app.post('/poll-votes', async (req, res) => {
     try {
       const resp = await pollVotes()
-      res.status(200).json({ message: 'pollvotes', data: resp });
+      res.status(200).json({data: resp.val });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Error poll votes' });

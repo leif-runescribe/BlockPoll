@@ -74,18 +74,18 @@ const Login = () => {
     <div className='h-screen flex flex-col justify-center items-center relative'>
       {error && alert("invalid login")}
       
-      <div className="">
-        <h1 className='text-white font-bold text-3xl'>Election</h1>
-      </div>
-      {isLoading&& <div className='mt-40 text-4xl'>A minute please...
+      {isLoading ? (<div className=' text-4xl'>A minute please...
         <div
         className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-black"
         role="status">
         <span
         className="!absolute text-b !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
         ></span>
-        </div></div>}
-      
+        </div></div>) :(
+          <>
+      <div className="">
+        <h1 className='text-white font-bold text-3xl'>Election</h1>
+      </div>
       <div className=" p-8 px-20 bg-opacity-50 rounded-lg z-10 text-center">
       <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-black">IITM Speaker Election <br/> 2024</h2>
         <div className=' absolute top-5 right-10 text-3xl text-hover:bg-indigo-400'>
@@ -138,7 +138,7 @@ const Login = () => {
             </div>
           </form>
         </div>
-      </div>
+      </div></>)}
     </div>
   );
 };

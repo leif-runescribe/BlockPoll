@@ -13,10 +13,12 @@ const Grid = ({ data }) => {
     const [isAbs, setIsAbs] = useState(false);
     const [isRej, setIsRej] = useState(false);
     const [final, setFinal] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const nav = useNavigate()
     
     let voteString = ""
     const pollString = "SLCS"
+    let finalString = ""
     // available preferences
     const [availablePref, setAvailablePref] = useState(new Array(data.length).fill(true));
 
@@ -73,45 +75,47 @@ const Grid = ({ data }) => {
         }
         voteString = isAbs? "ABS": "REJ"
         return (pollString+voteString)
-    }
-    
-    
+    } 
     const handleSubmit = async(e)=>{
         if(isAbs || isRej || !pref.includes(null)){ 
-            try{
-            const vote = result(pref,isAbs,isRej)         
-            console.log("voted ",vote)              
+            finalString = result(pref,isAbs,isRej)         
+                        
             // console.log(pref, isAbs, isRej)
-            const dataObj={
-                v: vote,
-                p: pollString
-            }
-            sendVote(dataObj)
-            nav('/voted')
-            // const res = await axios.post(`${baseUrl}?roll=${user}`)
-            // console.log(`${baseUrl}?roll=${user}`)
-            // console.log("update hasVoted",res)      
-        }catch(e){
-            console.log(e)
+            try{
+            const response = await sendVote()
+            console.log(response)
+            if(response.success)
+            {console.log("successs")
+            nav('/voted')}            
+        }catch(error){
+            
+            console.log(error)
         }
     }
         else  alert("Either allot preferences to all candidates or choose ABSTAIN or REJECT!")
     }   
-    const sendVote=async(dataObj)=>{
+    const sendVote=async()=>{
         try{    
-            console.log(dataObj)
-            const send =  await axios.post('http://localhost:3001/add-vote', dataObj)
-            const res = send.json()
+            setIsLoading(true);
+            console.log(finalString)      
+            const send =  await axios.post('http://localhost:3001/add-vote', {finalString})
+            const res = await send.data
             console.log("vote sent to contract",res)
+            return{success:true}
         }catch(e){
             console.log(e)
+            alert("Error submitting vote!")
+            return{success:false, error: e}
+        }finally{
+            setIsLoading(false)
+            
         }
     }
 
     return (
         <div>
             <div className="mt-40 grid grid-cols-1 gap-20 px-40 pb-20 ">
-                <div className='flex gap-32 h-12 item-center justify-center'>
+                <div className='flex gap-32 h-12 item-center justify-center mb-12'>
                     <button 
                         className={'w-72 h-20 text-white text-2xl bg-blue-500 rounded-md ring-black transition-all duration-200 hover:brightness-100 ' + (isAbs ? 'brightness-100 ring-4' : 'brightness-50 ring-0')}
                         onClick={setAbsHelper}
@@ -139,8 +143,8 @@ const Grid = ({ data }) => {
                     <button 
                         className={'w-72 h-20 text-white text-2xl bg-blue-500 rounded-md ring-black transition-all duration-200 hover:brightness-100 '}
                         onClick={handleSubmit}
-                    >
-                      Submit
+                    >{isLoading ? 'Loading...' : 'Submit'}
+                     
                     </button>
             </div>
         </div>
