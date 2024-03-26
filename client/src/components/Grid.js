@@ -99,7 +99,7 @@ const Grid = ({ data }) => {
             {console.log("successs")
             updateVoteStatus(user)
             logout()
-            nav('/')}            
+            nav('/voted')}            
         }catch(error){
             
             console.log(error)
