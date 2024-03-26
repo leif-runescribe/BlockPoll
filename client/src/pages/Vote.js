@@ -1,10 +1,31 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 import Grid from '../components/Grid';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
 const Admin = () => {
+  const {logout} = useContext(UserContext)
+  const [remainingTime, setRemainingTime] = useState(4 * 60); // 4 minutes in seconds
+  const nav = useNavigate()
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      if (remainingTime > 0) {
+        setRemainingTime(prevTime => prevTime - 1);
+      } else {
+        clearInterval(timerId);
+        nav('/'); // Redirect to home page
+        logout()
+      }
+    }, 1000);
+
+    return () => clearInterval(timerId); // Cleanup function to prevent memory leaks
+  }, []);
+
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
+
   const {user} = useContext(UserContext)
   const [data, setData] = useState(""); 
   const [isLoading, setIsLoading] = useState(false);
@@ -42,11 +63,15 @@ const Admin = () => {
 
   return (
     <div>
+      {user ?<>
       <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50 flex items-center justify-between p-8">
       <h1 className="text-3xl md:text-5xl font-bold">IITM SLC Speaker's Election, 2024</h1>
       
       <h1 className='text-2xl'>Roll No: {user? user: "info"}</h1>
-     
+      {!isLoading &&
+      <h1 className='text-3xl text-red-600'> Time Remaining: {minutes}:{seconds.toString().padStart(2, '0')}</h1>
+}
+   
     </nav>
     <div className='min-h-screen bg-gray-100 px-20 max-w-full '>
       <button type="submit" className="..."></button>
@@ -62,12 +87,22 @@ const Admin = () => {
         <div>
      
         <Grid data={data}/>
-       
-        
+         
         </div>
-      )}
-      
+      )}  
     </div>
+    </> 
+    :
+    <div className='items-center gap-10  flex text-4xl justify-center flex-col mt-72'>
+      You're logged out!
+      <button 
+                type="submit" 
+                className="flex py-4 w-32 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-2xl font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                <Link to="/login">Login</Link>
+              </button>
+      </div>
+    }
     </div>
   );}
          

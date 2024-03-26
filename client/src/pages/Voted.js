@@ -21,8 +21,8 @@ const Voted = () => {
          
         </div>
 
-        <div className="sm:mx-auto sm:w-full border border-gray-400 sm:max-w-sm mt-20 bg-white ">
-        <h2 className="text-white font-bold text-2xl px-32 py-8 w-full  bg-green-500 ">Voted succefully!</h2>
+        <div className=" border w-72 border-gray-400 sm:max-w-sm mt-20 bg-white ">
+        <h2 className="text-white font-bold text-2xl px-6 py-8 w-full flex  bg-green-500 ">You have already voted succefully!</h2>
             </div>
      
       </div>

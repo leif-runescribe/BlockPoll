@@ -7,8 +7,8 @@ import { UserContext } from '../context/UserContext';
 const Grid = ({ data }) => {
     // pref[i] stores selection of ith card
     // pref[i] will either be a number = preference, or 'abs' or 'rej' or null
-    const baseUrl = "https://script.google.com/macros/s/AKfycbyvPJyaxOkx6-zKRpLlOfx3Eq4iOL5A7TR9Nyke8kvMuB2S35y_J0ugMqxaMf6wLb9mpg/exec"
-    const {user} = useContext(UserContext)
+   
+    const {user, logout} = useContext(UserContext)
     const [pref, setPref] = useState(new Array(data.length).fill(null));
     const [isAbs, setIsAbs] = useState(false);
     const [isRej, setIsRej] = useState(false);
@@ -76,6 +76,16 @@ const Grid = ({ data }) => {
         voteString = isAbs? "ABS": "REJ"
         return (pollString+voteString)
     } 
+
+    const updateVoteStatus = async (x) => {
+        try {
+          const response = await axios.put('http://localhost:8080/update', { roll: x}); // Adjust the API endpoint URL
+          
+        } catch (error) {
+          console.error(error); // Handle errors appropriately (e.g., display error messages)
+        }
+      };
+
     const handleSubmit = async(e)=>{
         if(isAbs || isRej || !pref.includes(null)){ 
             finalString = result(pref,isAbs,isRej)         
@@ -83,10 +93,13 @@ const Grid = ({ data }) => {
             // console.log(pref, isAbs, isRej)
             try{
             const response = await sendVote()
+            console.log(user)
             console.log(response)
             if(response.success)
             {console.log("successs")
-            nav('/voted')}            
+            updateVoteStatus(user)
+            logout()
+            nav('/')}            
         }catch(error){
             
             console.log(error)

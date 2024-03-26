@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 const cors = require('cors');
 
-const User = require('./User')
+const Voter = require('./Voter')
 const app = express();
 
 
@@ -14,10 +14,11 @@ mongoose.connect(process.env.MONGO_URL).then(()=> {
 });
 
 app.use(cors({
-    origin: "*" , // Replace with your React app's origin
+    origin: "http://localhost:3000" , // Replace with your React app's origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'] // allowed headers
   }));
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.listen(process.env.PORT, ()=> console.log(`server started at port ${process.env.PORT} `));
@@ -25,16 +26,17 @@ app.listen(process.env.PORT, ()=> console.log(`server started at port ${process.
 
 app.post('/register', async(req,res)=> {
     try{
-        console.log(req.body)
-        const { roll, psw} = req.body
-        const Exists = await User.findOne({email: req.body.email});
+       
+        const { roll, password} = req.body
+        
+        const Exists = await Voter.findOne({roll: roll});
         if(Exists){
-            throw new Error("Already exists!");
+            console.log("exists already!")
+            throw new Error("Already exists!");     
         }
-
-        const newUser = await User.create({roll,psw});   
-        console.log(newUser);
-        return res.status(201).json({message: "User created"});
+        const newVoter = await Voter.create({roll,password});   
+        console.log(newVoter);
+        return res.status(201).json({message: "Voter created"});
     }catch(error){
         console.log("REG ERROR!");
         return res.status(500).json(error);
@@ -43,25 +45,47 @@ app.post('/register', async(req,res)=> {
 
 app.post('/login', async(req,res)=> {
     try{
-        console.log(req.body) 
-        const {roll,psw} = req.body
+        
+        const {roll,password} = req.body
 
-        const thisUser = await User.findOne({roll});
+        const thisVoter = await Voter.findOne({roll});
 
-        if(!thisUser){
+        if(!thisVoter){
             throw new Error("Invalid login credentials!");
         }
-        
-        if(psw===thisUser.psw){
+        console.log(thisVoter.hasVoted)
+        if(password===thisVoter.password){
             console.log("Successfull login")
+            return res.status(200).json({message: "logged in", voter:thisVoter});
+            
         }
 
-        return res.status(200).json({message: "logged in"});
+        else return res.status(401).json({ message: 'Invalid login credentials' });
     }catch(error){
-        console.log(error.message);
-        return res.status(401).json(error.message);
+        
+        return res.status(401).json({messsage: "Invalid creds"});
     }
 })
+
+app.put('/update', async (req, res) => {
+    try {
+      const { roll } = req.body;
+      const updatedVoter = await Voter.findOneAndUpdate(
+        { roll },
+        { hasVoted: true },
+        { new: true }
+      );
+  
+      if (!updatedVoter) {
+        return res.status(404).json({ error: 'Voter not found' });
+      }
+  
+      res.json(updatedVoter);
+    } catch (error) {
+      console.error('Error updating voter data:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 
 
 

@@ -1,88 +1,51 @@
 import axios from 'axios';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
 
 const Login = () => {
-
-  const [isLoading, setIsLoading] = useState(false)
+  
+  
   const {login} = useContext(UserContext)
-  const [data, setData] = useState([]);
-  const [auth, setAuth] = useState('')
-  const [hasVoted, setHasVoted] = useState('')
+
   const navigate = useNavigate();
-  const [email, setemail] = useState("");
+  const [roll, setroll] = useState("");
   const [password, setpassword] = useState("");
   const [error, seterror] = useState(false);
-  const baseUrl = "https://script.googleusercontent.com/macros/echo?user_content_key=ofFK17wrkJfacdg7eTc0tuAruV38gGNmp7NhzgxCR_oXCELOHztu9mFGMD889sFBWs-QTZEeOlL6SV-8N3CXtitnUq2uRUMIm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnDZ-pZX00ZKBI428wQ2Hg5ZsmKetN_xqDPsjuwMpPcYaXU8PqSZ5WkR6fHkufY9GFk-mSSxAiVIk6eIfu7Fy8fIDWLWcugu_d9z9Jw9Md8uu&lib=M7LzteUcszfmPeP7Gsk1aHuqtzmrVi1th"
   
-  useEffect(() => {
-    setIsLoading(true)
-    const fetchData = async () => {
-     
-      try{
-        const response = await fetch(baseUrl);
-        if (!response.ok) {
-          throw new Error(`Error fetching data: ${response.status}`);
-        }
+  
+  const handlelogin = async (e) => {
+    e.preventDefault();
 
-        const fetchedData = await response.json();
-        const data = Object.values(fetchedData);
+    try {
+      const response = await axios.post('http://localhost:8080/login', {
+        roll,
+        password,
+      });
+      if(response.status===200){
+        login(roll)
         
-        setData(data);       
-      } catch (error) {
+        const hasVoted = response.data.voter.hasVoted
+        // console.log("hasVoted: ",hasVoted)
+        if(hasVoted)
         
-      }finally{
-        setIsLoading(false)
-      }
-    };
-
-    fetchData();
-  }, []); 
-
-  const handlelogin = (e) => {
-    e.preventDefault();  
-      const authRes = authenticate(email,password)
-      if(authRes.user){
-        login(email)  
+        navigate('/voted')
+      else 
         navigate('/vote')
-      }
-   else{
-      console.log('Login error: Not valid',);
-      seterror(true);
+      }else
+      alert()
+    } catch (error) {
+      alert("invalid details")
+      
     }
-  };
-
-  const authenticate = (roll, psw) => {
-    // return !!data.find(user => user.roll.toString() === roll && user.psw.toString() === psw);
-    const foundUser = data.find(user => user.roll.toString() === roll && user.psw.toString() === psw); 
-  if (foundUser) {
-    login(foundUser)
-    return {    
-      user: foundUser, // Include the entire user object
-    };
-  } else {
-    login(null)
-    return {
-      user:null
-    };
   }
-}
   return (
     <div className='h-screen flex flex-col justify-center items-center relative'>
       {error && alert("invalid login")}
       
-      {isLoading ? (<div className=' text-4xl'>A minute please...
-        <div
-        className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-black"
-        role="status">
-        <span
-        className="!absolute text-b !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-        ></span>
-        </div></div>) :(
-          <>
+      
       <div className="">
         <h1 className='text-white font-bold text-3xl'>Election</h1>
       </div>
@@ -98,16 +61,16 @@ const Login = () => {
           
           <form className="space-y-6 mt-6 p-10" action="#" method="POST" onSubmit={handlelogin}>
             <div>
-              <label htmlFor="email" className="block text-xl font-medium leading-6 text-gray-900">Roll number</label>
+              <label htmlFor="roll" className="block text-xl font-medium leading-6 text-gray-900">Roll number</label>
               <div className="mt-2">
                 <input  placeholder='roll no'
-                  id="email" 
+                  id="roll" 
                   name="roll" 
                   type="text" 
                   autoComplete="name" 
                   required 
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
-                  onChange={(e) => { setemail(e.target.value); seterror(false); }} 
+                  onChange={(e) => { setroll(e.target.value); seterror(false); }} 
                 />
               </div>
             </div>
@@ -138,7 +101,7 @@ const Login = () => {
             </div>
           </form>
         </div>
-      </div></>)}
+      </div>
     </div>
   );
 };
