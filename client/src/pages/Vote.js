@@ -15,6 +15,7 @@ const Admin = () => {
       setRemainingTime((prevTimeLeft) => {
         if (prevTimeLeft === 0) {
           clearInterval(timer);
+          logout()
           alert('timeout');
           nav('/login');
           return 0;
