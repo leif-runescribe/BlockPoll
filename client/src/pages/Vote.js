@@ -6,22 +6,25 @@ import { UserContext } from '../context/UserContext';
 
 const Admin = () => {
   const {logout} = useContext(UserContext)
-  const [remainingTime, setRemainingTime] = useState(4 * 60); // 4 minutes in seconds
+  const [remainingTime, setRemainingTime] = useState(240); // 4 minutes in seconds
   const nav = useNavigate()
 
+
   useEffect(() => {
-    const timerId = setInterval(() => {
-      if (remainingTime > 0) {
-        setRemainingTime(prevTime => prevTime - 1);
-      } else {
-        clearInterval(timerId);
-        nav('/'); // Redirect to home page
-        logout()
-      }
+    const timer = setInterval(() => {
+      setRemainingTime((prevTimeLeft) => {
+        if (prevTimeLeft === 0) {
+          clearInterval(timer);
+          alert('timeout');
+          nav('/login');
+          return 0;
+        }
+        return prevTimeLeft - 1;
+      });
     }, 1000);
 
-    return () => clearInterval(timerId); // Cleanup function to prevent memory leaks
-  }, []);
+    return () => clearInterval(timer);
+  },[]);
 
   const minutes = Math.floor(remainingTime / 60);
   const seconds = remainingTime % 60;

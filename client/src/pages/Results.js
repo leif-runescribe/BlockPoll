@@ -61,7 +61,8 @@ const Results = () => {
         ></span>
         </div></div>):
         <>
-         <div className="flex mt-20 justify-center items-center">
+         <div className="flex mt-40 justify-center items-center">
+          <h1 className='absolute text-center top-10 py-10 text-3xl text-black'>Poll Results</h1>
   <table className="table-auto border border-black">
     <thead>
       <tr>
