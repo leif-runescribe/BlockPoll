@@ -69,7 +69,7 @@ const Admin = () => {
     <div>
       {user ?<>
       <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50 flex items-center justify-between p-8">
-      <h1 className="text-3xl md:text-5xl font-bold">IITM SLC Speaker's Election, 2024</h1>
+      <h1 className="text-3xl md:text-5xl font-bold">Presidential Election, 2024</h1>
       
       <h1 className='text-2xl'>Roll No: {user? user: "info"}</h1>
       {!isLoading &&

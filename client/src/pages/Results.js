@@ -66,10 +66,10 @@ const Results = () => {
   <table className="table-auto border border-black">
     <thead>
       <tr>
-        <th className="px-4 py-2 text-left border border-black">Prakhar Maheshwari</th>
-        <th className="px-4 py-2 text-left border border-black">Atharv Joshi</th>
-        <th className="px-4 py-2 text-left border border-black">Diwakar Kumar</th>
-        <th className="px-4 py-2 text-left border border-black">Anushka Bhangale</th>
+        <th className="px-4 py-2 text-left border border-black">Candidate 1</th>
+        <th className="px-4 py-2 text-left border border-black">Candidate 2</th>
+        <th className="px-4 py-2 text-left border border-black">Candidate 3</th>
+        <th className="px-4 py-2 text-left border border-black">Candidate 4</th>
       </tr>
     </thead>
     <tbody>
@@ -88,7 +88,7 @@ const Results = () => {
       })}
     </tbody>
   </table>
-</div> hi
+</div> 
         </>
         }
     
