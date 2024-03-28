@@ -39,7 +39,7 @@ const Admin = () => {
       setIsLoading(true)
       
       try{
-        const response = await fetch("https://script.google.com/macros/s/AKfycbyBRLxlZDbX9NslbJlAiHAtPnGhGGWppF5-Mffdo-DIngitfVyxtgheg8oYMill7Yvs/exec");
+        const response = await fetch("<insert sheet url>");
         if (!response.ok) {
           throw new Error(`Error fetching data: ${response.status}`);
         }
